@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
-  class UserTest < ActiveSupport::TestCase
+
 
     def setup
       @user = User.new(name: "Example User", email: "user@example.com",
@@ -69,5 +69,12 @@ class UserTest < ActiveSupport::TestCase
       assert_not @user.authenticated?(:remember,'')
     end
 
-end
-end
+    test "associated microposts should be destroyed" do
+      @user.save
+      @user.microposts.create!(content: "Lorem ipsum")
+      assert_difference 'Micropost.count', -1 do
+        @user.destroy
+      end
+    end
+ end
+
